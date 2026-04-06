@@ -16,7 +16,7 @@ jobs:
 
       # 1. 安装交叉编译工具链 (MinGW-w64)
       - name: Install MinGW-w64
-        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64 && sudo ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/x86_64-pc-windows-gnu-windres
 
       # 2. 安装 Rust 并添加 Windows GNU 目标平台
       - name: Setup Rust toolchain
