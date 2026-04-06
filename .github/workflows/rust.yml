@@ -1,22 +1,41 @@
-name: Rust
+name: Cross-Compile Windows App
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # 你可以根据需要修改触发分支
   pull_request:
     branches: [ "main" ]
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
-  build:
-
+  build-windows:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 1. 安装交叉编译工具链 (MinGW-w64)
+      - name: Install MinGW-w64
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64
+
+      # 2. 安装 Rust 并添加 Windows GNU 目标平台
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-gnu
+
+      # 3. 设置 Rust 缓存 (可选，但能大幅加快后续构建速度)
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      # 4. 执行交叉编译 (生成 Release 版本的 .exe)
+      - name: Build for Windows
+        run: cargo build --release --target x86_64-pc-windows-gnu
+
+      # 5. 上传生成的 .exe 文件，以便你可以在 GitHub 页面下载
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-executable
+          # 编译出的 exe 文件会存放在这个路径下
+          path: target/x86_64-pc-windows-gnu/release/*.exe
