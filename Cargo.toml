@@ -1,0 +1,23 @@
+[package]
+name = "huaye"
+version = "0.4.2"
+edition = "2021"
+
+[dependencies]
+eframe = { version = "0.33.3", features = ["serde"] }
+egui = "0.33.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+image = { version = "0.24", features = ["png", "jpeg"] }
+rfd = "0.14"
+flume = "0.11"
+tokio = { version = "1.40", features = ["full"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+chrono = "0.4.44"
+tracing-appender = "0.2.4"
+sysinfo = "0.38.4"
+serialport = "4.9.0"
+
+[build-dependencies]
+winres = "0.1.12"
